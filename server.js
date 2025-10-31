@@ -85,21 +85,21 @@ app.post("/webhook", async (req, res) => {
 
   // 1️⃣ TRACK SHIPMENT
   else if (text === "1") {
-    await sendMessage(from, "🔎 Please enter your shipment reference number (e.g., TGL12345).");
+    await sendMessage(from, "🔎 Please enter your shipment BLerence number (e.g., TGL12345).");
   }
 
   // If user enters reference number
   else if (/tgl\d+/i.test(text)) {
-    const ref = text.toUpperCase();
-    const shipment = await Shipment.findOne({ refNo: ref });
+    const BL = text.toUpperCase();
+    const shipment = await Shipment.findOne({ BLNo: BL });
 
     if (shipment) {
       await sendMessage(
         from,
-        `✅ *Shipment Details:*\nRef No: ${shipment.refNo}\nOrigin: ${shipment.origin}\nDestination: ${shipment.destination}\nStatus: ${shipment.status}\nVessel: ${shipment.vessel}\nETD: ${shipment.etd}\nETA: ${shipment.eta}`
+        `✅ *Shipment Details:*\nBL No: ${shipment.BLNo}\nOrigin: ${shipment.origin}\nDestination: ${shipment.destination}\nStatus: ${shipment.status}\nVessel: ${shipment.vessel}\nETD: ${shipment.etd}\nETA: ${shipment.eta}`
       );
     } else {
-      await sendMessage(from, `❌ No shipment found for *${ref}*. Please check your reference number.`);
+      await sendMessage(from, `❌ No shipment found for *${BL}*. Please check your BLerence number.`);
     }
   }
 
@@ -128,7 +128,7 @@ app.post("/webhook", async (req, res) => {
       const updates = recent
         .map(
           s =>
-            `📦 ${s.refNo} → ${s.status}\nETA: ${s.eta}\n----------------`
+            `📦 ${s.BLNo} → ${s.status}\nETA: ${s.eta}\n----------------`
         )
         .join("\n");
       await sendMessage(from, `📰 *Recent Shipment Updates:*\n${updates}`);

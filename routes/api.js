@@ -15,10 +15,10 @@ router.get('/shipments', async (req, res) => {
 });
 
 // Get shipment by reference number
-router.get('/shipments/:refNo', async (req, res) => {
+router.get('/shipments/:BLNo', async (req, res) => {
     try {
         const shipment = await Shipment.findOne({ 
-            refNo: req.params.refNo.toUpperCase() 
+            BLNo: req.params.BLNo.toUpperCase() 
         });
         if (!shipment) {
             return res.status(404).json({ error: 'Shipment not found' });
