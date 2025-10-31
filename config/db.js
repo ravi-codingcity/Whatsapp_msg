@@ -6,8 +6,6 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://papanpillo56kilo:R
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverSelectionTimeoutMS: 5000,
       maxPoolSize: 10
     });

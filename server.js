@@ -3,6 +3,8 @@ const axios = require('axios');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
 const Shipment = require('./models/Shipment'); // Fixed path
+const { router: adminRouter, addLog } = require('./routes/admin');
+const apiRouter = require('./routes/api');
 
 const app = express();
 
@@ -51,10 +53,16 @@ async function sendMessage(to, body) {
     }
 }
 
-// Webhook endpoint with better error handling
+// Add routes
+app.use('/admin', adminRouter);
+app.use('/api', apiRouter);
+
+// Update webhook to log requests
 app.post("/webhook", async (req, res) => {
     try {
         console.log('Webhook received:', JSON.stringify(req.body, null, 2));
+        // Log webhook data
+        addLog(req.body);
         
         const msg = req.body;
         if (!msg?.data) {
