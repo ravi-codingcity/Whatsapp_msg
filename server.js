@@ -79,17 +79,17 @@ app.post("/webhook", async (req, res) => {
   if (text === "hi" || text === "hello") {
     await sendMessage(
       from,
-      `👋 Hello! Welcome to *TGL Logistics*.\n\nPlease choose an option:\n1️⃣ Track my shipment\n2️⃣ Book a new shipment\n3️⃣ Talk to support\n4️⃣ View recent updates`
+      `👋 Hello! Welcome to *OmTrans Logistics*.\n\nPlease choose an option:\n1️⃣ Track my shipment\n2️⃣ Book a new shipment\n3️⃣ Talk to support\n4️⃣ View recent updates`
     );
   }
 
   // 1️⃣ TRACK SHIPMENT
   else if (text === "1") {
-    await sendMessage(from, "🔎 Please enter your shipment BLerence number (e.g., TGL12345).");
+    await sendMessage(from, "🔎 Please enter your shipment BL number (e.g., BL12345).");
   }
 
   // If user enters reference number
-  else if (/tgl\d+/i.test(text)) {
+  else if (/BL\d+/i.test(text)) {
     const BL = text.toUpperCase();
     const shipment = await Shipment.findOne({ BLNo: BL });
 
@@ -115,7 +115,7 @@ app.post("/webhook", async (req, res) => {
   else if (text === "3") {
     await sendMessage(
       from,
-      "👩‍💼 Our support team will contact you shortly.\nYou can also email us at *support@tglglobal.com*."
+      "👩‍💼 Our support team will contact you shortly.\nYou can also email us at *support@omtrans.com*."
     );
   }
 
