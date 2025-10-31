@@ -1,23 +1,41 @@
 const mongoose = require('mongoose');
 
+// Drop existing indexes first
+const dropIndexes = async () => {
+  try {
+    await mongoose.model('Shipment').collection.dropIndex('refNo_1');
+    console.log('Old index dropped successfully');
+  } catch (err) {
+    console.log('No old index to drop');
+  }
+};
+
 const shipmentSchema = new mongoose.Schema({
   BLNo: { 
     type: String, 
-    required: true,
+    required: [true, 'BL Number is required'],
     unique: true,
     trim: true,
     index: true
   },
   clientName: { 
     type: String,
+    required: [true, 'Client name is required'],
     trim: true 
   },
   clientPhone: { 
     type: String,
+    required: [true, 'Client phone is required'],
     trim: true 
   },
-  origin: String,
-  destination: String,
+  origin: {
+    type: String,
+    required: [true, 'Origin is required']
+  },
+  destination: {
+    type: String,
+    required: [true, 'Destination is required']
+  },
   vessel: String,
   etd: String,
   eta: String,
@@ -31,18 +49,22 @@ const shipmentSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true,
-  versionKey: false
+  versionKey: false,
+  strict: true // Only allow defined fields
 });
 
-// Add compound index for better querying
-shipmentSchema.index({ BLNo: 1, clientPhone: 1 });
-
-// Pre-save middleware to ensure BLNo is not null
-shipmentSchema.pre('save', function(next) {
-  if (!this.BLNo) {
-    next(new Error('BLNo is required'));
+// Clear all indexes and create new ones
+shipmentSchema.pre('save', async function(next) {
+  if (this.isNew) {
+    try {
+      await dropIndexes();
+    } catch (error) {
+      console.log('Index drop error:', error);
+    }
   }
   next();
 });
 
-module.exports = mongoose.model("Shipment", shipmentSchema);
+const Shipment = mongoose.model("Shipment", shipmentSchema);
+
+module.exports = Shipment;

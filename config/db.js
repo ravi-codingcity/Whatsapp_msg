@@ -12,16 +12,15 @@ const connectDB = async () => {
 
     console.log("✅ MongoDB Connected:", conn.connection.host);
 
-    // Add connection error handler
-    mongoose.connection.on('error', (err) => {
-      console.error('❌ MongoDB connection error:', err);
-    });
-
-    // Add disconnection handler
-    mongoose.connection.on('disconnected', () => {
-      console.log('❌ MongoDB disconnected, attempting to reconnect...');
-      setTimeout(connectDB, 5000);
-    });
+    // Drop old indexes if they exist
+    const collections = await conn.connection.db.collections();
+    for (let collection of collections) {
+      try {
+        await collection.dropIndex('refNo_1');
+      } catch (err) {
+        // Index doesn't exist, ignore
+      }
+    }
 
   } catch (error) {
     console.error("❌ MongoDB Connection Error:", error.message);
