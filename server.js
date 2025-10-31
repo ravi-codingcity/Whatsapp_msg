@@ -85,7 +85,7 @@ app.post("/webhook", async (req, res) => {
 
   // 1️⃣ TRACK SHIPMENT
   else if (text === "1") {
-    await sendMessage(from, "🔎 Please enter your shipment BL number (e.g., BL12345).");
+    await sendMessage(from, "🔎 Please enter your shipment BL number");
   }
 
   // If user enters reference number
@@ -99,7 +99,7 @@ app.post("/webhook", async (req, res) => {
         `✅ *Shipment Details:*\nBL No: ${shipment.BLNo}\nOrigin: ${shipment.origin}\nDestination: ${shipment.destination}\nStatus: ${shipment.status}\nVessel: ${shipment.vessel}\nETD: ${shipment.etd}\nETA: ${shipment.eta}`
       );
     } else {
-      await sendMessage(from, `❌ No shipment found for *${BL}*. Please check your BLerence number.`);
+      await sendMessage(from, `❌ No shipment found for *${BL}*. Please check your BL number.`);
     }
   }
 

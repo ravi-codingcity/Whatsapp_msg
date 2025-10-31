@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const shipmentSchema = new mongoose.Schema({
-  BLNo: { type: String, required: true, unique: true },
+  BLNo: { type: String, required: true },
   clientName: String,
   clientPhone: String,
   origin: String,
